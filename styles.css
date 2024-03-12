@@ -1,0 +1,78 @@
+:root {
+  --font-base: "Space Mono", monospace;
+  --color-dark: #1f1a38;
+  --color-dark-glare: #989ea9;
+  --color-success: #76f7bf;
+  --color-success-dark: #2d7a59;
+  --color-bg: #817fa9;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-base);
+  color: var(--color-dark);
+  background-color: var(--color-bg);
+  width: min(100% - 3rem, 40ch);
+  margin-inline: auto;
+  margin-block: 3rem;
+}
+
+@property --progress {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+[role="progressbar"] {
+  --size: 132px;
+  font-size: 2rem;
+  --bar-width: 20px;
+
+  width: var(--size);
+  aspect-ratio: 1 / 1;
+
+  background: conic-gradient(var(--color-dark) var(--progress, 0), var(--color-dark-glare) 0%);
+  margin: 2rem auto;
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  transition: --progress 500ms linear;
+
+  &::after {
+    content: attr(aria-valuenow) "%";
+    background: var(--color-bg);
+    border-radius: inherit;
+    width: calc(100% - var(--bar-width));
+    aspect-ratio: 1 / 1;
+
+    display: grid;
+    place-items: center;
+  }
+
+  span {
+    display: none;
+  }
+}
+
+[role="progressbar"][aria-valuenow="100"]::after {
+  animation: progressComplete 0s forwards;
+  animation-delay: 500ms;
+}
+
+@keyframes progressComplete {
+  to {
+    content: "YES";
+    background-color: var(--color-success);
+  }
+}
+
+.progressbar:not([role="progressbar"]) {
+  color: red;
+}
